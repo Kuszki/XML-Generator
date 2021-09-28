@@ -34,9 +34,10 @@ void GeneratorWorker::start(const QString& Src, const QString& Dest, const QStri
 	emit onProgressSetup(0, 0);
 
 	File.open(QFile::ReadOnly | QFile::Text);
+	Stream.setCodec(QTextCodec::codecForLocale());
 	Stream.setLocale(QLocale());
 
-	const QStringList Headers = Stream.readLine().trimmed().split('\t');
+	const QStringList Headers = Stream.readLine().split('\t');
 	const int Count = Headers.size();
 
 	while (!Stream.atEnd()) Lines.append(Stream.readLine().split('\t'));
@@ -46,9 +47,9 @@ void GeneratorWorker::start(const QString& Src, const QString& Dest, const QStri
 	auto Outcodec = QTextCodec::codecForName(Codec.toLocal8Bit());
 	if (!Outcodec) Outcodec = QTextCodec::codecForLocale();
 
-	for (const auto& Data : Lines)
+	for (const auto& Line : Lines)
 	{
-		QFileInfo Info(Dest + '/' + Data.value(Index));
+		QFileInfo Info(Dest + '/' + Line.value(Index));
 		QDir().mkpath(Info.absolutePath());
 		QFile Outfile(Info.absoluteFilePath());
 		QTextStream Outstream(&Outfile);
@@ -62,7 +63,7 @@ void GeneratorWorker::start(const QString& Src, const QString& Dest, const QStri
 		for (int i = 0; i < Count; ++i) if (i != Index)
 		{
 			Outstream << "\t<" << Headers.value(i) << ">"
-					<< Data.value(i)
+					<< Line.value(i)
 					<< "</" << Headers.value(i) << ">"
 					<< Qt::endl;
 		}

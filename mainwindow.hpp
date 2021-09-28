@@ -43,6 +43,9 @@ class MainWindow : public QMainWindow
 		Ui::MainWindow* ui;
 		GeneratorWorker* worker;
 
+		QProgressBar* progressBar;
+		QPushButton* generateButton;
+
 	public:
 
 		explicit MainWindow(QWidget* parent = nullptr);

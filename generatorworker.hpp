@@ -21,7 +21,9 @@
 #ifndef GENERATORWORKER_HPP
 #define GENERATORWORKER_HPP
 
+#include <QtWidgets>
 #include <QtCore>
+#include <QtGui>
 
 class GeneratorWorker : public QObject
 {

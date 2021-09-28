@@ -28,8 +28,15 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	ui->progressBar->setVisible(false);
-	ui->generateButton->setEnabled(false);
+	this->progressBar = new QProgressBar(this);
+	this->generateButton = new QPushButton(QIcon::fromTheme("system-run"),
+								    tr("Generate files"), this);
+
+	this->progressBar->setVisible(false);
+	this->generateButton->setEnabled(false);
+
+	ui->statusBar->addPermanentWidget(generateButton);
+	ui->statusBar->addPermanentWidget(progressBar);
 
 	worker->moveToThread(&WorkerThread);
 	WorkerThread.start();
@@ -39,11 +46,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	ui->encCombo->model()->sort(0);
 
+	connect(generateButton, &QPushButton::clicked, this, &MainWindow::generateButtonClicked);
+
 	connect(worker, &GeneratorWorker::onProgressStart, this, &MainWindow::processStarted);
 	connect(worker, &GeneratorWorker::onProgressEnd, this, &MainWindow::processEnded);
 
-	connect(worker, &GeneratorWorker::onProgressSetup, ui->progressBar, &QProgressBar::setRange);
-	connect(worker, &GeneratorWorker::onProgressChange, ui->progressBar, &QProgressBar::setValue);
+	connect(worker, &GeneratorWorker::onProgressSetup, this->progressBar, &QProgressBar::setRange);
+	connect(worker, &GeneratorWorker::onProgressChange, this->progressBar, &QProgressBar::setValue);
 
 	connect(this, &MainWindow::onGenerateRequest, worker, &GeneratorWorker::start);
 }
@@ -77,14 +86,14 @@ void MainWindow::srcButtonClicked(void)
 
 void MainWindow::destButtonClicked(void)
 {
-	const QString Path = QFileDialog::getExistingDirectory(this, tr("Select destonation path"), QString());
+	const QString Path = QFileDialog::getExistingDirectory(this, tr("Select destination path"), QString());
 
 	if (!Path.isEmpty()) ui->destEdit->setText(Path);
 }
 
 void MainWindow::generateButtonClicked(void)
 {
-	ui->generateButton->setEnabled(false);
+	this->generateButton->setEnabled(false);
 
 	emit onGenerateRequest(ui->srcEdit->text(),
 					   ui->destEdit->text(),
@@ -102,21 +111,21 @@ void MainWindow::validateDialogParams(void)
 				 !ui->encCombo->currentText().isEmpty() &&
 				 ui->indexCombo->currentIndex() != -1;
 
-	ui->generateButton->setEnabled(OK);
+	this->generateButton->setEnabled(OK);
 }
 
 void MainWindow::processStarted(void)
 {
-	ui->generateButton->setEnabled(false);
-	ui->generateButton->setVisible(false);
-	ui->progressBar->setTextVisible(true);
+	this->generateButton->setEnabled(false);
+	this->generateButton->setVisible(false);
+	this->progressBar->setVisible(true);
 }
 
 void MainWindow::processEnded(void)
 {
-	ui->generateButton->setEnabled(true);
-	ui->generateButton->setVisible(true);
-	ui->progressBar->setTextVisible(false);
+	this->generateButton->setEnabled(true);
+	this->generateButton->setVisible(true);
+	this->progressBar->setVisible(false);
 
 	QMessageBox::information(this, tr("Progress"), tr("Job done"));
 }
