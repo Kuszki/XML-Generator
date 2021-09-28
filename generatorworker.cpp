@@ -20,11 +20,12 @@
 
 #include "generatorworker.hpp"
 
-GeneratorWorker::GeneratorWorker(QObject *parent) : QObject(parent) {}
+GeneratorWorker::GeneratorWorker(QObject *parent)
+	: QObject(parent) {}
 
 GeneratorWorker::~GeneratorWorker(void) {}
 
-void GeneratorWorker::start(const QString& Src, const QString& Dest, const QString& Root, const QString& Data, int Index)
+void GeneratorWorker::start(const QString& Src, const QString& Dest, const QString& Root, const QString& Data, const QString& Codec, int Index)
 {
 	QFile File(Src); QTextStream Stream(&File); QList<QStringList> Lines; int P(0);
 	const QString Rooth = Data.isEmpty() ? Root : Root + ' ' + Data;
@@ -42,6 +43,9 @@ void GeneratorWorker::start(const QString& Src, const QString& Dest, const QStri
 
 	emit onProgressSetup(0, Lines.size());
 
+	auto Outcodec = QTextCodec::codecForName(Codec.toLocal8Bit());
+	if (!Outcodec) Outcodec = QTextCodec::codecForLocale();
+
 	for (const auto& Data : Lines)
 	{
 		QFileInfo Info(Dest + '/' + Data.value(Index));
@@ -50,20 +54,20 @@ void GeneratorWorker::start(const QString& Src, const QString& Dest, const QStri
 		QTextStream Outstream(&Outfile);
 
 		Outfile.open(QFile::WriteOnly | QFile::Text);
-		Outstream.setCodec("UTF-8");
+		Outstream.setCodec(Outcodec);
 
-		Outstream << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << NEWLINE;
-		Outstream << "<" << Rooth << ">" << NEWLINE;
+		Outstream << "<?xml version=\"1.0\" encoding=\"" << Codec << "\"?>" << Qt::endl;
+		Outstream << "<" << Rooth << ">" << Qt::endl;
 
 		for (int i = 0; i < Count; ++i) if (i != Index)
 		{
 			Outstream << "\t<" << Headers.value(i) << ">"
 					<< Data.value(i)
 					<< "</" << Headers.value(i) << ">"
-					<< NEWLINE;
+					<< Qt::endl;
 		}
 
-		Outstream << "</" << Root << ">" << NEWLINE;
+		Outstream << "</" << Root << ">" << Qt::endl;
 
 		emit onProgressChange(++P);
 	}

@@ -14,12 +14,25 @@
    <string>XML Generator</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="system-run"/>
+   <iconset theme="system-run">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0" colspan="2">
      <layout class="QFormLayout" name="formLayout">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
+      <property name="rowWrapPolicy">
+       <enum>QFormLayout::DontWrapRows</enum>
+      </property>
+      <property name="labelAlignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <property name="formAlignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="srcLabel">
         <property name="text">
@@ -48,7 +61,8 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset theme="document-open"/>
+           <iconset theme="document-open">
+            <normaloff>.</normaloff>.</iconset>
           </property>
          </widget>
         </item>
@@ -82,20 +96,21 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset theme="document-open"/>
+           <iconset theme="document-open">
+            <normaloff>.</normaloff>.</iconset>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="indexLabel">
         <property name="text">
          <string>Path index</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="3" column="1">
        <widget class="QComboBox" name="indexCombo">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -105,14 +120,14 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="4" column="0">
        <widget class="QLabel" name="rootLabel">
         <property name="text">
          <string>Root class</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="4" column="1">
        <widget class="QLineEdit" name="rootEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -122,20 +137,43 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
+      <item row="5" column="0">
        <widget class="QLabel" name="dataLabel">
         <property name="text">
          <string>Root data</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="5" column="1">
        <widget class="QPlainTextEdit" name="dataEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="encCombo">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <property name="currentText">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="encLabel">
+        <property name="text">
+         <string>Text encoding</string>
         </property>
        </widget>
       </item>
@@ -150,7 +188,8 @@
        <string>Generate files</string>
       </property>
       <property name="icon">
-       <iconset theme="system-run"/>
+       <iconset theme="system-run">
+        <normaloff>.</normaloff>.</iconset>
       </property>
      </widget>
     </item>
@@ -199,8 +238,8 @@
    <slot>validateDialogParams()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>397</x>
-     <y>130</y>
+     <x>514</x>
+     <y>157</y>
     </hint>
     <hint type="destinationlabel">
      <x>861</x>
@@ -215,8 +254,8 @@
    <slot>validateDialogParams()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>489</x>
-     <y>90</y>
+     <x>606</x>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
      <x>877</x>
@@ -263,12 +302,28 @@
    <slot>generateButtonClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>572</x>
-     <y>487</y>
+     <x>630</x>
+     <y>470</y>
     </hint>
     <hint type="destinationlabel">
      <x>578</x>
      <y>567</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>encCombo</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>validateDialogParams()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>589</x>
+     <y>85</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>745</x>
+     <y>83</y>
     </hint>
    </hints>
   </connection>

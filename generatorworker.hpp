@@ -23,8 +23,6 @@
 
 #include <QtCore>
 
-#define NEWLINE "\r\n"
-
 class GeneratorWorker : public QObject
 {
 
@@ -39,7 +37,7 @@ class GeneratorWorker : public QObject
 
 		void start(const QString& Src, const QString& Dest,
 				 const QString& Root, const QString& Data,
-				 int Index);
+				 const QString& Codec, int Index);
 
 	signals:
 

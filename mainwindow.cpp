@@ -34,6 +34,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	worker->moveToThread(&WorkerThread);
 	WorkerThread.start();
 
+	for (const auto& c : QTextCodec::availableCodecs())
+		ui->encCombo->addItem(QString::fromLocal8Bit(c));
+
+	ui->encCombo->model()->sort(0);
+
 	connect(worker, &GeneratorWorker::onProgressStart, this, &MainWindow::processStarted);
 	connect(worker, &GeneratorWorker::onProgressEnd, this, &MainWindow::processEnded);
 
@@ -85,6 +90,7 @@ void MainWindow::generateButtonClicked(void)
 					   ui->destEdit->text(),
 					   ui->rootEdit->text(),
 					   ui->dataEdit->document()->toPlainText(),
+					   ui->encCombo->currentText(),
 					   ui->indexCombo->currentIndex());
 }
 
@@ -93,6 +99,7 @@ void MainWindow::validateDialogParams(void)
 	const bool OK = !ui->srcEdit->text().isEmpty() &&
 				 !ui->destEdit->text().isEmpty() &&
 				 !ui->rootEdit->text().isEmpty() &&
+				 !ui->encCombo->currentText().isEmpty() &&
 				 ui->indexCombo->currentIndex() != -1;
 
 	ui->generateButton->setEnabled(OK);

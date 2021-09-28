@@ -9,7 +9,7 @@ QT       += core gui widgets
 TARGET   = XML-Generator
 TEMPLATE = app
 
-CONFIG   += c++11
+CONFIG   += c++19
 
 SOURCES += \
 	   main.cpp \

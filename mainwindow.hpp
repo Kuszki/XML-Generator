@@ -64,7 +64,7 @@ class MainWindow : public QMainWindow
 
 		void onGenerateRequest(const QString&, const QString&,
 						   const QString&, const QString&,
-						   int);
+						   const QString&, int);
 
 };
 
